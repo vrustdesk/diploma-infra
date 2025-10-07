@@ -1,29 +1,31 @@
+$gi = ".gitignore"
+$lines = @"
 # Terraform
 .terraform/
 *.tfstate
 *.tfstate.*
+.terraform.lock.hcl
 crash.log
-override.tf
-override.tf.json
+
+# TF vars / secrets
 *.tfvars
 *.tfvars.json
-.terraform.lock.hcl
+serviceaccountkeyfile.json
+yc-credentials*.json
 
-# Ansible cache
+# Ansible
 *.retry
-__pycache__/
-*.swp
+ansible/.vault*
+ansible/vault*
+ansible/*.secret
+ansible/*.key
 
-# OS / IDE
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
+# Logs/tmp
+logs/
+*.log
+*.tmp
 
-# SSH/ключи/секреты
-*.pem
-*.key
-*.crt
-*.pub
-id_rsa*
-id_ed25519*
+# Big/binary artifacts
+docs/screenshots/*.psd
+"@
+if (Test-Path $gi) { Add-Content $gi $lines } else { Set-Content $gi $lines }

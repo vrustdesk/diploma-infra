@@ -1,0 +1,8 @@
+cloud_id      = "yc-********"
+folder_id     = "b1g********"
+zone_a        = "ru-central1-a"
+zone_b        = "ru-central1-b"
+ssh_pub_key   = "ssh-ed25519 AAAA... user@host"
+image_id      = "fd8q********" # ubuntu-22.04
+preemptible   = true
+snapshot_retention_days = 7
