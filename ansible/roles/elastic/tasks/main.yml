@@ -1,0 +1,5 @@
+---
+- name: Install Filebeat
+  apt:
+    name: filebeat
+    state: present

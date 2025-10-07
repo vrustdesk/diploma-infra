@@ -1,0 +1,10 @@
+ansible/
+├── hosts.ini
+├── site.yml
+└── roles/
+    ├── web/
+    │   └── tasks/main.yml
+    ├── zabbix/
+    │   └── tasks/main.yml
+    └── elastic/
+        └── tasks/main.yml

@@ -1,0 +1,29 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*.tfvars
+*.tfvars.json
+.terraform.lock.hcl
+
+# Ansible cache
+*.retry
+__pycache__/
+*.swp
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# SSH/ключи/секреты
+*.pem
+*.key
+*.crt
+*.pub
+id_rsa*
+id_ed25519*

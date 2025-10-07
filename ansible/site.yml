@@ -1,0 +1,8 @@
+---
+- name: Deploy infrastructure components
+  hosts: all
+  become: true
+  roles:
+    - { role: web, when: "'web' in group_names" }
+    - { role: zabbix, when: "'zabbix' in group_names" }
+    - { role: elastic, when: "'elastic' in group_names" }

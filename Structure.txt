@@ -1,0 +1,30 @@
+diploma-infra/
+├─ .gitignore
+├─ README.md
+├─ terraform/
+│  ├─ alb.tf
+│  ├─ compute_private.tf
+│  ├─ compute_public.tf
+│  ├─ main.tf
+│  ├─ nat.tf
+│  ├─ outputs.tf
+│  ├─ security_groups.tf
+│  ├─ snapshots.tf
+└─ ansible/
+   ├─ ansible.cfg
+   ├─ site.yml
+   ├─ inventory/
+   │  └─ hosts.ini
+   ├─ group_vars/
+   │  └─ all.yml
+   └─ roles/
+      ├─ common/
+      │  └─ tasks/main.yml
+      ├─ nginx/
+      │  └─ tasks/main.yml
+      ├─ filebeat/
+      │  ├─ tasks/main.yml
+      │  └─ templates/filebeat.yml.j2
+      └─ zabbix_agent/
+         ├─ tasks/main.yml
+         └─ templates/zabbix_agentd.conf.j2

@@ -1,0 +1,5 @@
+---
+- name: Install Zabbix agent
+  apt:
+    name: zabbix-agent
+    state: present
