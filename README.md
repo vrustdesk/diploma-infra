@@ -34,7 +34,7 @@ flowchart LR
 
   %% Логи с вебов в Elasticsearch
   webA -- Filebeat logs --> ES
-  webB -- Filebeat logs --> ES
+  webB -- Filebeat logs --> ES ```
 
 
 
