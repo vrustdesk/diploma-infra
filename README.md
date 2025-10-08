@@ -16,20 +16,26 @@
 ```mermaid
 flowchart LR
   internet((Internet)) --> ALB[YC ALB :80]
+
   subgraph Public Subnet
-    ALB -->|HTTP| webA(Web A - private)
-    ALB -->|HTTP| webB(Web B - private)
     Bastion[(Bastion SSH)]
     Kibana[(Kibana UI)]
     Zabbix[(Zabbix UI)]
   end
+
   subgraph Private Subnet
+    webA(Web A - nginx)
+    webB(Web B - nginx)
     ES[(Elasticsearch)]
-    webA --> ES
-    webB --> ES
   end
-  webA <-- Filebeat logs --> ES
-  webB <-- Filebeat logs --> ES
+
+  ALB -->|HTTP| webA
+  ALB -->|HTTP| webB
+
+  %% Логи с вебов в Elasticsearch
+  webA -- Filebeat logs --> ES
+  webB -- Filebeat logs --> ES
+
 
 
 Как развернуть
