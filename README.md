@@ -37,6 +37,7 @@ flowchart LR
   %% Логи с вебов в Elasticsearch
   webA -- Filebeat logs --> ES
   webB -- Filebeat logs --> ES
+  ```
 Что в репозитории
 Terraform — описывает всю инфраструктуру (VPC, subnets, NAT/RT, SG, ALB, ВМ).
 
