@@ -1,46 +1,42 @@
 resource "yandex_alb_target_group" "web_tg" {
-  name = "web-tg"
+  name = "tg-web"
 
-  target {
-    subnet_id  = data.yandex_vpc_subnet.private_a.id
-    ip_address = yandex_compute_instance.web_a.network_interface[0].ip_address
-  }
-
-  target {
-    subnet_id  = data.yandex_vpc_subnet.private_b.id
-    ip_address = yandex_compute_instance.web_b.network_interface[0].ip_address
+  dynamic "target" {
+    for_each = yandex_compute_instance.web
+    content {
+      subnet_id  = target.value.network_interface[0].subnet_id
+      ip_address = target.value.network_interface[0].ip_address
+    }
   }
 }
 
 resource "yandex_alb_backend_group" "web_bg" {
-  name = "web-bg"
+  name = "bg-web"
 
   http_backend {
-    name             = "http-80"
-    port             = 80
+    name = "web-http"
+    port = 80
+
     target_group_ids = [yandex_alb_target_group.web_tg.id]
 
-    load_balancing_config {
-      panic_threshold = 50
-    }
-
     healthcheck {
-      interval         = "2s"
-      timeout          = "1s"
-      healthcheck_port = 80
       http_healthcheck {
         path = "/"
       }
+      interval            = "5s"
+      timeout             = "3s"
+      unhealthy_threshold = 2
+      healthy_threshold   = 2
     }
   }
 }
 
 resource "yandex_alb_http_router" "web_router" {
-  name = "web-router"
+  name = "router-web"
 }
 
-resource "yandex_alb_virtual_host" "web_vhost" {
-  name           = "web-vhost"
+resource "yandex_alb_virtual_host" "web_vh" {
+  name           = "vh-web"
   http_router_id = yandex_alb_http_router.web_router.id
 
   route {
@@ -54,33 +50,30 @@ resource "yandex_alb_virtual_host" "web_vhost" {
 }
 
 resource "yandex_alb_load_balancer" "web_alb" {
-  name       = "web-alb"
-  network_id = data.yandex_vpc_network.net.id
-
-  # SG для ALB (должен существовать)
-  security_group_ids = [yandex_vpc_security_group.alb_sg.id]
+  name       = "alb-web"
+  network_id = yandex_vpc_network.main.id
 
   allocation_policy {
     location {
-      zone_id   = "ru-central1-d"
-      subnet_id = data.yandex_vpc_subnet.public_d.id
+      zone_id   = "ru-central1-a"
+      subnet_id = yandex_vpc_subnet.subnets["public_d"].id
     }
   }
 
   listener {
     name = "http"
-
     endpoint {
       address {
         external_ipv4_address {}
       }
       ports = [80]
     }
-
     http {
       handler {
         http_router_id = yandex_alb_http_router.web_router.id
       }
     }
   }
+
+  security_group_ids = [yandex_vpc_security_group.alb_sg.id]
 }
