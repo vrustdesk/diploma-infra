@@ -1,0 +1,31 @@
+terraform {
+  required_providers {
+    yandex = {
+      source  = "yandex-cloud/yandex"
+      version = ">= 0.146.0"
+    }
+  }
+}
+
+provider "yandex" {
+  # Один из способов аутентификации:
+  # token                   = var.yc_token
+  # service_account_key_file = var.sa_key_file
+  cloud_id  = var.cloud_id
+  folder_id = var.folder_id
+  zone      = var.zone_a
+  # путь к ключу сервисного аккаунта на твоей машине
+}
+
+# Общие переменные
+locals {
+  platform_id = "standard-v3"
+  ssh_key     = chomp(file("C:/Users/A.K/.ssh/id_ed25519.pub"))
+}
+
+# Уже существующая в каталоге сеть и три дефолтные подсети
+data "yandex_vpc_network" "net" { name = "default" }
+
+data "yandex_vpc_subnet" "public_d" { name = "default-ru-central1-d" }
+data "yandex_vpc_subnet" "private_a" { name = "default-ru-central1-a" }
+data "yandex_vpc_subnet" "private_b" { name = "default-ru-central1-b" }

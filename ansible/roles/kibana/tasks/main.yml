@@ -1,0 +1,35 @@
+- name: Install prerequisites
+  apt:
+    name: [apt-transport-https, curl, gnupg]
+    state: present
+    update_cache: yes
+
+- name: Add Elastic GPG key
+  shell: curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+  args: { warn: false }
+  changed_when: false
+
+- name: Add Elastic repo
+  copy:
+    dest: /etc/apt/sources.list.d/elastic-8.x.list
+    content: "deb https://artifacts.elastic.co/packages/8.x/apt stable main\n"
+    mode: '0644'
+
+- name: Install kibana
+  apt:
+    name: kibana
+    state: present
+    update_cache: yes
+
+- name: Configure kibana.yml
+  template:
+    src: kibana.yml.j2
+    dest: /etc/kibana/kibana.yml
+    mode: '0644'
+  notify: restart kibana
+
+- name: Ensure kibana is enabled and running
+  service:
+    name: kibana
+    state: started
+    enabled: yes

@@ -1,0 +1,2 @@
+server.host: "0.0.0.0"
+elasticsearch.hosts: ["http://{{ hostvars[groups['elastic'][0]]['ansible_default_ipv4']['address'] | default('127.0.0.1') }}:9200"]

@@ -29,3 +29,4 @@ logs/
 docs/screenshots/*.psd
 "@
 if (Test-Path $gi) { Add-Content $gi $lines } else { Set-Content $gi $lines }
+.yc/

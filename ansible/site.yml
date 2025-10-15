@@ -1,8 +1,21 @@
----
-- name: Deploy infrastructure components
-  hosts: all
-  become: true
+- hosts: web
+  become: yes
   roles:
-    - { role: web, when: "'web' in group_names" }
-    - { role: zabbix, when: "'zabbix' in group_names" }
-    - { role: elastic, when: "'elastic' in group_names" }
+    - nginx
+    - filebeat
+    - zabbix_agent
+
+- hosts: elastic
+  become: yes
+  roles:
+    - elasticsearch
+
+- hosts: kibana
+  become: yes
+  roles:
+    - kibana
+
+- hosts: zabbix
+  become: yes
+  roles:
+    - zabbix_agent

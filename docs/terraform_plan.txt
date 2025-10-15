@@ -1,3 +1,1025 @@
+data.yandex_vpc_subnet.private_a: Reading...
+data.yandex_vpc_subnet.public_d: Reading...
+data.yandex_compute_image.ubuntu: Reading...
+data.yandex_vpc_network.net: Reading...
+data.yandex_vpc_subnet.private_b: Reading...
+data.yandex_compute_image.ubuntu: Read complete after 0s [id=fd8esej4lc19l259kuh0]
+data.yandex_vpc_subnet.public_d: Read complete after 0s [id=fl8a2m5rhm7c2quderir]
+data.yandex_vpc_subnet.private_b: Read complete after 0s [id=e2lp67slq6f1chp52rkg]
+data.yandex_vpc_subnet.private_a: Read complete after 0s [id=e9bm7u27umndafoqtnar]
+data.yandex_vpc_network.net: Read complete after 0s [id=enpjmmdk2s0gjvubq5p5]
 
-Planning failed. Terraform encountered an error while generating this plan.
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
 
+Terraform will perform the following actions:
+
+  # yandex_alb_backend_group.web_bg will be created
+  + resource "yandex_alb_backend_group" "web_bg" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + name       = "bg-web"
+
+      + http_backend {
+          + name             = "web-http"
+          + port             = 80
+          + target_group_ids = (known after apply)
+          + weight           = 1
+
+          + healthcheck {
+              + healthy_threshold   = 2
+              + interval            = "5s"
+              + timeout             = "3s"
+              + unhealthy_threshold = 2
+
+              + http_healthcheck {
+                  + path = "/"
+                }
+            }
+        }
+    }
+
+  # yandex_alb_http_router.web_router will be created
+  + resource "yandex_alb_http_router" "web_router" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + name       = "router-web"
+    }
+
+  # yandex_alb_load_balancer.web_alb will be created
+  + resource "yandex_alb_load_balancer" "web_alb" {
+      + created_at         = (known after apply)
+      + folder_id          = (known after apply)
+      + id                 = (known after apply)
+      + log_group_id       = (known after apply)
+      + name               = "alb-web"
+      + network_id         = (known after apply)
+      + security_group_ids = (known after apply)
+      + status             = (known after apply)
+
+      + allocation_policy {
+          + location {
+              + disable_traffic = false
+              + subnet_id       = (known after apply)
+              + zone_id         = "ru-central1-a"
+            }
+        }
+
+      + listener {
+          + name = "http"
+
+          + endpoint {
+              + ports = [
+                  + 80,
+                ]
+
+              + address {
+                  + external_ipv4_address {
+                      + address = (known after apply)
+                    }
+                }
+            }
+
+          + http {
+              + handler {
+                  + allow_http10       = false
+                  + http_router_id     = (known after apply)
+                  + rewrite_request_id = false
+                }
+            }
+        }
+    }
+
+  # yandex_alb_target_group.web_tg will be created
+  + resource "yandex_alb_target_group" "web_tg" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + name       = "tg-web"
+
+      + target {
+          + ip_address = (known after apply)
+          + subnet_id  = (known after apply)
+        }
+      + target {
+          + ip_address = (known after apply)
+          + subnet_id  = (known after apply)
+        }
+    }
+
+  # yandex_alb_virtual_host.web_vh will be created
+  + resource "yandex_alb_virtual_host" "web_vh" {
+      + http_router_id = (known after apply)
+      + id             = (known after apply)
+      + name           = "vh-web"
+
+      + route {
+          + name = "root"
+
+          + http_route {
+              + http_route_action {
+                  + backend_group_id = (known after apply)
+                }
+            }
+        }
+    }
+
+  # yandex_compute_instance.bastion will be created
+  + resource "yandex_compute_instance" "bastion" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = "bastion"
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = "yc-user:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAahzJiavYEK3eVjqDtcET9oq926UqG9biqkTA9v5UhX yc user@host"
+        }
+      + name                      = "bastion"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v3"
+      + service_account_id        = (known after apply)
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-d"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8esej4lc19l259kuh0"
+              + name        = (known after apply)
+              + size        = 10
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index              = (known after apply)
+          + ip_address         = (known after apply)
+          + ipv4               = true
+          + ipv6               = (known after apply)
+          + ipv6_address       = (known after apply)
+          + mac_address        = (known after apply)
+          + nat                = true
+          + nat_ip_address     = (known after apply)
+          + nat_ip_version     = (known after apply)
+          + security_group_ids = (known after apply)
+          + subnet_id          = "fl8a2m5rhm7c2quderir"
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 20
+          + cores         = 2
+          + memory        = 2
+        }
+
+      + scheduling_policy {
+          + preemptible = true
+        }
+    }
+
+  # yandex_compute_instance.es_a will be created
+  + resource "yandex_compute_instance" "es_a" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = "es-a"
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = "yc-user:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAahzJiavYEK3eVjqDtcET9oq926UqG9biqkTA9v5UhX yc user@host"
+        }
+      + name                      = "es-a"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v3"
+      + service_account_id        = (known after apply)
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-a"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8esej4lc19l259kuh0"
+              + name        = (known after apply)
+              + size        = 12
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index              = (known after apply)
+          + ip_address         = (known after apply)
+          + ipv4               = true
+          + ipv6               = (known after apply)
+          + ipv6_address       = (known after apply)
+          + mac_address        = (known after apply)
+          + nat                = false
+          + nat_ip_address     = (known after apply)
+          + nat_ip_version     = (known after apply)
+          + security_group_ids = (known after apply)
+          + subnet_id          = "e9bm7u27umndafoqtnar"
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 20
+          + cores         = 2
+          + memory        = 4
+        }
+
+      + scheduling_policy {
+          + preemptible = true
+        }
+    }
+
+  # yandex_compute_instance.kibana will be created
+  + resource "yandex_compute_instance" "kibana" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = "kibana"
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = "yc-user:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAahzJiavYEK3eVjqDtcET9oq926UqG9biqkTA9v5UhX yc user@host"
+        }
+      + name                      = "kibana"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v3"
+      + service_account_id        = (known after apply)
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-d"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8esej4lc19l259kuh0"
+              + name        = (known after apply)
+              + size        = 10
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index              = (known after apply)
+          + ip_address         = (known after apply)
+          + ipv4               = true
+          + ipv6               = (known after apply)
+          + ipv6_address       = (known after apply)
+          + mac_address        = (known after apply)
+          + nat                = true
+          + nat_ip_address     = (known after apply)
+          + nat_ip_version     = (known after apply)
+          + security_group_ids = (known after apply)
+          + subnet_id          = "fl8a2m5rhm7c2quderir"
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 20
+          + cores         = 2
+          + memory        = 2
+        }
+
+      + scheduling_policy {
+          + preemptible = true
+        }
+    }
+
+  # yandex_compute_instance.web["web-a"] will be created
+  + resource "yandex_compute_instance" "web" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = (known after apply)
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = "ubuntu:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAahzJiavYEK3eVjqDtcET9oq926UqG9biqkTA9v5UhX yc user@host"
+        }
+      + name                      = "web-a"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v3"
+      + service_account_id        = (known after apply)
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-a"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8jf9qa6kj7nhat329h"
+              + name        = (known after apply)
+              + size        = 10
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index              = (known after apply)
+          + ip_address         = (known after apply)
+          + ipv4               = true
+          + ipv6               = (known after apply)
+          + ipv6_address       = (known after apply)
+          + mac_address        = (known after apply)
+          + nat                = false
+          + nat_ip_address     = (known after apply)
+          + nat_ip_version     = (known after apply)
+          + security_group_ids = (known after apply)
+          + subnet_id          = (known after apply)
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 20
+          + cores         = 2
+          + memory        = 2
+        }
+
+      + scheduling_policy {
+          + preemptible = true
+        }
+    }
+
+  # yandex_compute_instance.web["web-b"] will be created
+  + resource "yandex_compute_instance" "web" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = (known after apply)
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = "ubuntu:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAahzJiavYEK3eVjqDtcET9oq926UqG9biqkTA9v5UhX yc user@host"
+        }
+      + name                      = "web-b"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v3"
+      + service_account_id        = (known after apply)
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-b"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8jf9qa6kj7nhat329h"
+              + name        = (known after apply)
+              + size        = 10
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index              = (known after apply)
+          + ip_address         = (known after apply)
+          + ipv4               = true
+          + ipv6               = (known after apply)
+          + ipv6_address       = (known after apply)
+          + mac_address        = (known after apply)
+          + nat                = false
+          + nat_ip_address     = (known after apply)
+          + nat_ip_version     = (known after apply)
+          + security_group_ids = (known after apply)
+          + subnet_id          = (known after apply)
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 20
+          + cores         = 2
+          + memory        = 2
+        }
+
+      + scheduling_policy {
+          + preemptible = true
+        }
+    }
+
+  # yandex_compute_instance.web_a will be created
+  + resource "yandex_compute_instance" "web_a" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = "web-a"
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = "yc-user:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAahzJiavYEK3eVjqDtcET9oq926UqG9biqkTA9v5UhX yc user@host"
+        }
+      + name                      = "web-a"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v3"
+      + service_account_id        = (known after apply)
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-a"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8esej4lc19l259kuh0"
+              + name        = (known after apply)
+              + size        = 10
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index              = (known after apply)
+          + ip_address         = (known after apply)
+          + ipv4               = true
+          + ipv6               = (known after apply)
+          + ipv6_address       = (known after apply)
+          + mac_address        = (known after apply)
+          + nat                = false
+          + nat_ip_address     = (known after apply)
+          + nat_ip_version     = (known after apply)
+          + security_group_ids = (known after apply)
+          + subnet_id          = "e9bm7u27umndafoqtnar"
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 20
+          + cores         = 2
+          + memory        = 2
+        }
+
+      + scheduling_policy {
+          + preemptible = true
+        }
+    }
+
+  # yandex_compute_instance.web_b will be created
+  + resource "yandex_compute_instance" "web_b" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = "web-b"
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = "yc-user:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAahzJiavYEK3eVjqDtcET9oq926UqG9biqkTA9v5UhX yc user@host"
+        }
+      + name                      = "web-b"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v3"
+      + service_account_id        = (known after apply)
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-b"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8esej4lc19l259kuh0"
+              + name        = (known after apply)
+              + size        = 10
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index              = (known after apply)
+          + ip_address         = (known after apply)
+          + ipv4               = true
+          + ipv6               = (known after apply)
+          + ipv6_address       = (known after apply)
+          + mac_address        = (known after apply)
+          + nat                = false
+          + nat_ip_address     = (known after apply)
+          + nat_ip_version     = (known after apply)
+          + security_group_ids = (known after apply)
+          + subnet_id          = "e2lp67slq6f1chp52rkg"
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 20
+          + cores         = 2
+          + memory        = 2
+        }
+
+      + scheduling_policy {
+          + preemptible = true
+        }
+    }
+
+  # yandex_compute_instance.zabbix will be created
+  + resource "yandex_compute_instance" "zabbix" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = "zabbix"
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = "yc-user:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAahzJiavYEK3eVjqDtcET9oq926UqG9biqkTA9v5UhX yc user@host"
+        }
+      + name                      = "zabbix"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v3"
+      + service_account_id        = (known after apply)
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-d"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8esej4lc19l259kuh0"
+              + name        = (known after apply)
+              + size        = 10
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index              = (known after apply)
+          + ip_address         = (known after apply)
+          + ipv4               = true
+          + ipv6               = (known after apply)
+          + ipv6_address       = (known after apply)
+          + mac_address        = (known after apply)
+          + nat                = true
+          + nat_ip_address     = (known after apply)
+          + nat_ip_version     = (known after apply)
+          + security_group_ids = (known after apply)
+          + subnet_id          = "fl8a2m5rhm7c2quderir"
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 20
+          + cores         = 2
+          + memory        = 2
+        }
+
+      + scheduling_policy {
+          + preemptible = true
+        }
+    }
+
+  # yandex_compute_snapshot_schedule.daily_7d will be created
+  + resource "yandex_compute_snapshot_schedule" "daily_7d" {
+      + created_at       = (known after apply)
+      + disk_ids         = (known after apply)
+      + folder_id        = (known after apply)
+      + id               = (known after apply)
+      + name             = "daily-7d"
+      + retention_period = "168h"
+      + status           = (known after apply)
+
+      + schedule_policy {
+          + expression = "0 0 * * *"
+          + start_at   = (known after apply)
+        }
+
+      + snapshot_spec {
+          + description = "Daily snapshot"
+          + labels      = {
+              + "env" = "diploma"
+            }
+        }
+    }
+
+  # yandex_vpc_gateway.egress will be created
+  + resource "yandex_vpc_gateway" "egress" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + labels     = (known after apply)
+      + name       = "egress-gw"
+
+      + shared_egress_gateway {}
+    }
+
+  # yandex_vpc_network.main will be created
+  + resource "yandex_vpc_network" "main" {
+      + created_at                = (known after apply)
+      + default_security_group_id = (known after apply)
+      + folder_id                 = (known after apply)
+      + id                        = (known after apply)
+      + labels                    = (known after apply)
+      + name                      = "main-net"
+      + subnet_ids                = (known after apply)
+    }
+
+  # yandex_vpc_route_table.nat will be created
+  + resource "yandex_vpc_route_table" "nat" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + labels     = (known after apply)
+      + name       = "rt-nat"
+      + network_id = (known after apply)
+
+      + static_route {
+          + destination_prefix = "0.0.0.0/0"
+          + gateway_id         = (known after apply)
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # yandex_vpc_security_group.alb_sg will be created
+  + resource "yandex_vpc_security_group" "alb_sg" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + labels     = (known after apply)
+      + name       = "sg-alb"
+      + network_id = (known after apply)
+      + status     = (known after apply)
+
+      + egress {
+          + from_port         = 0
+          + id                = (known after apply)
+          + labels            = (known after apply)
+          + port              = -1
+          + protocol          = "ANY"
+          + to_port           = 65535
+          + v4_cidr_blocks    = [
+              + "0.0.0.0/0",
+            ]
+          + v6_cidr_blocks    = []
+            # (3 unchanged attributes hidden)
+        }
+
+      + ingress {
+          + description       = "HTTP from Internet"
+          + from_port         = -1
+          + id                = (known after apply)
+          + labels            = (known after apply)
+          + port              = 80
+          + protocol          = "TCP"
+          + to_port           = -1
+          + v4_cidr_blocks    = [
+              + "0.0.0.0/0",
+            ]
+          + v6_cidr_blocks    = []
+            # (2 unchanged attributes hidden)
+        }
+    }
+
+  # yandex_vpc_security_group.bastion_sg will be created
+  + resource "yandex_vpc_security_group" "bastion_sg" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + labels     = (known after apply)
+      + name       = "sg-bastion"
+      + network_id = (known after apply)
+      + status     = (known after apply)
+
+      + egress {
+          + from_port         = 0
+          + id                = (known after apply)
+          + labels            = (known after apply)
+          + port              = -1
+          + protocol          = "ANY"
+          + to_port           = 65535
+          + v4_cidr_blocks    = [
+              + "0.0.0.0/0",
+            ]
+          + v6_cidr_blocks    = []
+            # (3 unchanged attributes hidden)
+        }
+
+      + ingress {
+          + from_port         = -1
+          + id                = (known after apply)
+          + labels            = (known after apply)
+          + port              = 22
+          + protocol          = "TCP"
+          + to_port           = -1
+          + v4_cidr_blocks    = [
+              + "0.0.0.0/0",
+            ]
+          + v6_cidr_blocks    = []
+            # (3 unchanged attributes hidden)
+        }
+    }
+
+  # yandex_vpc_security_group.elk_sg will be created
+  + resource "yandex_vpc_security_group" "elk_sg" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + labels     = (known after apply)
+      + name       = "sg-elk"
+      + network_id = (known after apply)
+      + status     = (known after apply)
+
+      + egress {
+          + from_port         = 0
+          + id                = (known after apply)
+          + labels            = (known after apply)
+          + port              = -1
+          + protocol          = "ANY"
+          + to_port           = 65535
+          + v4_cidr_blocks    = [
+              + "0.0.0.0/0",
+            ]
+          + v6_cidr_blocks    = []
+            # (3 unchanged attributes hidden)
+        }
+
+      + ingress {
+          + description       = "Elasticsearch from private subnets"
+          + from_port         = -1
+          + id                = (known after apply)
+          + labels            = (known after apply)
+          + port              = 9200
+          + protocol          = "TCP"
+          + to_port           = -1
+          + v4_cidr_blocks    = [
+              + "10.129.0.0/24",
+              + "10.130.0.0/24",
+              + "10.128.0.0/24",
+            ]
+          + v6_cidr_blocks    = []
+            # (2 unchanged attributes hidden)
+        }
+      + ingress {
+          + description       = "Kibana"
+          + from_port         = -1
+          + id                = (known after apply)
+          + labels            = (known after apply)
+          + port              = 5601
+          + protocol          = "TCP"
+          + to_port           = -1
+          + v4_cidr_blocks    = [
+              + "0.0.0.0/0",
+            ]
+          + v6_cidr_blocks    = []
+            # (2 unchanged attributes hidden)
+        }
+    }
+
+  # yandex_vpc_security_group.web_sg will be created
+  + resource "yandex_vpc_security_group" "web_sg" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + labels     = (known after apply)
+      + name       = "sg-web"
+      + network_id = (known after apply)
+      + status     = (known after apply)
+
+      + egress {
+          + from_port         = 0
+          + id                = (known after apply)
+          + labels            = (known after apply)
+          + port              = -1
+          + protocol          = "ANY"
+          + to_port           = 65535
+          + v4_cidr_blocks    = [
+              + "0.0.0.0/0",
+            ]
+          + v6_cidr_blocks    = []
+            # (3 unchanged attributes hidden)
+        }
+
+      + ingress {
+          + description       = "HTTP from ALB"
+          + from_port         = -1
+          + id                = (known after apply)
+          + labels            = (known after apply)
+          + port              = 80
+          + protocol          = "TCP"
+          + security_group_id = (known after apply)
+          + to_port           = -1
+          + v4_cidr_blocks    = []
+          + v6_cidr_blocks    = []
+            # (1 unchanged attribute hidden)
+        }
+      + ingress {
+          + description       = "Zabbix agent"
+          + from_port         = -1
+          + id                = (known after apply)
+          + labels            = (known after apply)
+          + port              = 10050
+          + protocol          = "TCP"
+          + security_group_id = (known after apply)
+          + to_port           = -1
+          + v4_cidr_blocks    = []
+          + v6_cidr_blocks    = []
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # yandex_vpc_security_group.zabbix_sg will be created
+  + resource "yandex_vpc_security_group" "zabbix_sg" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + labels     = (known after apply)
+      + name       = "sg-zabbix"
+      + network_id = (known after apply)
+      + status     = (known after apply)
+
+      + egress {
+          + from_port         = 0
+          + id                = (known after apply)
+          + labels            = (known after apply)
+          + port              = -1
+          + protocol          = "ANY"
+          + to_port           = 65535
+          + v4_cidr_blocks    = [
+              + "0.0.0.0/0",
+            ]
+          + v6_cidr_blocks    = []
+            # (3 unchanged attributes hidden)
+        }
+
+      + ingress {
+          + description       = "Zabbix UI"
+          + from_port         = -1
+          + id                = (known after apply)
+          + labels            = (known after apply)
+          + port              = 80
+          + protocol          = "TCP"
+          + to_port           = -1
+          + v4_cidr_blocks    = [
+              + "0.0.0.0/0",
+            ]
+          + v6_cidr_blocks    = []
+            # (2 unchanged attributes hidden)
+        }
+      + ingress {
+          + description       = "Zabbix server port"
+          + from_port         = -1
+          + id                = (known after apply)
+          + labels            = (known after apply)
+          + port              = 10051
+          + protocol          = "TCP"
+          + to_port           = -1
+          + v4_cidr_blocks    = [
+              + "10.129.0.0/24",
+              + "10.130.0.0/24",
+              + "10.128.0.0/24",
+            ]
+          + v6_cidr_blocks    = []
+            # (2 unchanged attributes hidden)
+        }
+    }
+
+  # yandex_vpc_subnet.subnets["private_a"] will be created
+  + resource "yandex_vpc_subnet" "subnets" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "subnet-private_a"
+      + network_id     = (known after apply)
+      + route_table_id = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.129.0.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-a"
+    }
+
+  # yandex_vpc_subnet.subnets["private_b"] will be created
+  + resource "yandex_vpc_subnet" "subnets" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "subnet-private_b"
+      + network_id     = (known after apply)
+      + route_table_id = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.130.0.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-b"
+    }
+
+  # yandex_vpc_subnet.subnets["public_d"] will be created
+  + resource "yandex_vpc_subnet" "subnets" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "subnet-public_d"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.128.0.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-d"
+    }
+
+Plan: 25 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + alb_external_ip = (known after apply)
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.

@@ -1,0 +1,11 @@
+provider "yandex" {
+  # Способ 1: токен из переменной/vars (быстро для теста)
+  token = var.yc_token
+
+  # Способ 2 (альтернатива): ключ сервисного аккаунта
+  # service_account_key_file = var.sa_key_file
+
+  cloud_id  = var.cloud_id
+  folder_id = var.folder_id
+  zone      = var.zone_a
+}

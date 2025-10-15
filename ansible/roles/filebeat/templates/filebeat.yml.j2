@@ -1,0 +1,15 @@
+filebeat.inputs: []
+filebeat.modules:
+  - module: nginx
+    access:
+      enabled: true
+      var.paths: ["/var/log/nginx/access.log*"]
+    error:
+      enabled: true
+      var.paths: ["/var/log/nginx/error.log*"]
+
+output.elasticsearch:
+  hosts: ["{{ hostvars[groups['elastic'][0]]['ansible_default_ipv4']['address'] | default('127.0.0.1') }}:9200"]
+
+setup.kibana:
+  host: "{{ hostvars[groups['kibana'][0]]['ansible_default_ipv4']['address'] | default('127.0.0.1') }}:5601"

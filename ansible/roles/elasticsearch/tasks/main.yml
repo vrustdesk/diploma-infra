@@ -1,0 +1,35 @@
+- name: Install prerequisites
+  apt:
+    name: [apt-transport-https, curl, gnupg]
+    state: present
+    update_cache: yes
+
+- name: Add Elasticsearch GPG key
+  shell: curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+  args: { warn: false }
+  changed_when: false
+
+- name: Add Elasticsearch repo
+  copy:
+    dest: /etc/apt/sources.list.d/elastic-8.x.list
+    content: "deb https://artifacts.elastic.co/packages/8.x/apt stable main\n"
+    mode: '0644'
+
+- name: Install elasticsearch
+  apt:
+    name: elasticsearch
+    state: present
+    update_cache: yes
+
+- name: Configure elasticsearch.yml
+  template:
+    src: elasticsearch.yml.j2
+    dest: /etc/elasticsearch/elasticsearch.yml
+    mode: '0644'
+  notify: restart elasticsearch
+
+- name: Ensure elasticsearch is enabled and running
+  service:
+    name: elasticsearch
+    state: started
+    enabled: yes

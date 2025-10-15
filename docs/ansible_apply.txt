@@ -1,0 +1,38 @@
+
+PLAY [Deploy infrastructure components] ****************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [zabbix.ru-central1.internal]
+ok: [kibana.ru-central1.internal]
+ok: [web-b.ru-central1.internal]
+ok: [web-a.ru-central1.internal]
+ok: [es-a.ru-central1.internal]
+
+TASK [web : Install and configure NGINX] ***************************************
+skipping: [es-a.ru-central1.internal]
+skipping: [zabbix.ru-central1.internal]
+skipping: [kibana.ru-central1.internal]
+ok: [web-b.ru-central1.internal]
+ok: [web-a.ru-central1.internal]
+
+TASK [zabbix : Install Zabbix agent] *******************************************
+skipping: [web-a.ru-central1.internal]
+skipping: [web-b.ru-central1.internal]
+skipping: [es-a.ru-central1.internal]
+skipping: [kibana.ru-central1.internal]
+ok: [zabbix.ru-central1.internal]
+
+TASK [elastic : Install Filebeat] **********************************************
+skipping: [zabbix.ru-central1.internal]
+skipping: [web-a.ru-central1.internal]
+skipping: [web-b.ru-central1.internal]
+changed: [es-a.ru-central1.internal]
+changed: [kibana.ru-central1.internal]
+
+PLAY RECAP *********************************************************************
+es-a.ru-central1.internal  : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+kibana.ru-central1.internal : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+web-a.ru-central1.internal : ok=2    changed=0    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+web-b.ru-central1.internal : ok=2    changed=0    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+zabbix.ru-central1.internal : ok=2    changed=0    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+
